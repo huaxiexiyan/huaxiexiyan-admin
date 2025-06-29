@@ -1,0 +1,129 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.12'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'maven-publish'
+//	id 'org.graalvm.buildtools.native' version '0.10.6'
+	// id 'com.google.cloud.tools.jib'
+}
+
+group = 'com.huaxiexiyan'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			groupId = 'com.huaxiexiyan'
+			artifactId = 'huaxiexiyan-common-api'
+			version = '0.0.1-SNAPSHOT'
+		}
+	}
+}
+
+// 指定编码格式
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+// dependencyManagement版本统一管理，类似于父maven的dependencyManagement
+// Spring Cloud 2023 与 Spring Boot 3.2.x 3.2.12
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.6"
+		mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:2023.0.1.0"
+	}
+}
+
+repositories {
+	//maven仓库
+	mavenLocal()
+	maven { url 'https://maven.aliyun.com/repository/central/' }
+	maven { url 'https://maven.aliyun.com/repository/public/' }
+	maven { url 'https://maven.aliyun.com/repository/spring/' }
+	maven { url 'https://maven.aliyun.com/repository/google/' }
+	maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+	maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
+	maven { url 'https://maven.aliyun.com/repository/grails-core/' }
+	maven { url 'https://maven.aliyun.com/repository/apache-snapshots/' }
+	maven { url 'https://repo.spring.io/milestone/' }
+	mavenCentral()
+}
+
+dependencies {
+	// 依赖项
+	implementation 'org.springframework:spring-core'
+	implementation 'org.springframework:spring-beans'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation 'com.fasterxml.jackson.core:jackson-core'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.google.guava:guava:31.1-jre'
+
+	implementation 'com.baomidou:mybatis-plus-annotation:3.5.3.1'
+	implementation 'com.baomidou:mybatis-plus-extension:3.5.3.1'
+
+	implementation 'org.hibernate.orm:hibernate-core'
+	implementation 'org.slf4j:slf4j-api'
+
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310' // 使用与您的 Jackson 版本匹配的版本
+	// 对象比较工具
+	implementation 'de.danielbechler:java-object-diff:0.95'
+	// 工具依赖
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+
+compileJava {
+	options.compilerArgs += [
+			'-Amapstruct.suppressGeneratorTimestamp=true',
+			'-Amapstruct.suppressGeneratorVersionInfoComment=true',
+			'-Amapstruct.verbose=true'
+	]
+}
+
+sourceSets {
+	main {
+		resources {
+			//可以将java目录下的所有非.java资源打包到classes下
+			srcDir 'src/main/java'
+		}
+	}
+
+	test {
+		resources {
+			//可以将java目录下的所有非.java资源打包到classes下
+			srcDir 'src/test/groovy'
+		}
+	}
+}
+
+tasks.register('copyTestResources', Copy) {
+	from "${projectDir}/src/test/resources"
+	into "${buildDir}/resources/test"
+}
+processTestResources.dependsOn copyTestResources
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.warnings = false
+	options.deprecation = true
+	options.compilerArgs += ["-parameters"]
+}
+
+jar {
+	preserveFileTimestamps false
+	reproducibleFileOrder true
+}
