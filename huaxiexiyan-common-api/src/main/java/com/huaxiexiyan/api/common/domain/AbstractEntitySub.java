@@ -1,11 +1,10 @@
-package com.huaxiexiyan.api.common.entity.jpa;
+package com.huaxiexiyan.api.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import org.hibernate.annotations.Comment;
 
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
  * @author xiyan
  * @date 2023/7/31 17:26
  */
-@MappedSuperclass
 @Data
 public abstract class AbstractEntitySub {
 
@@ -25,16 +23,16 @@ public abstract class AbstractEntitySub {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
-    /**
-     * 最后修改时间
-     **/
-    @Comment("记录最后修改时间")
-    @JsonIgnore
-    private LocalDateTime lmTime;
+	/**
+	 * 最后修改时间
+	 **/
+	@Comment("记录最后修改时间")
+	@JsonIgnore
+	private LocalDateTime lastModifyTime;
 
-    @Comment("记录最后修改人id")
-    @JsonIgnore
-    private Long lmBy;
+	@Comment("记录最后修改人id")
+	@JsonIgnore
+	private Long lastModifyBy;
 
     /**
      * 删除时间

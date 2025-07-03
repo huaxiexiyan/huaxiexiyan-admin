@@ -47,21 +47,21 @@ public class ApiResponse<T> {
 	public ApiResponse(Boolean success, T data, String errorCode, String errorMessage, Integer showType, String traceId, String host) {
 		this.success = success;
 		this.data = data;
-		this.errorCode = errorCode;
-		this.errorMessage = errorMessage;
-		this.showType = showType;
 		if (!success) {
+			this.errorCode = errorCode;
+			this.errorMessage = errorMessage;
+			this.showType = showType;
 			this.traceId = MDC.get("traceId");
+			this.host = host;
 		}
-		this.host = host;
 	}
 
 	public ApiResponse(String errorCode) {
 		this(false, null, errorCode, null, null, null, null);
 	}
 
-	public ApiResponse(String errorCode, String errorMessage) {
-		this(false, null, errorCode, errorMessage, null, null, null);
+	public ApiResponse(String errorCode, String errorMessage, Integer showType) {
+		this(false, null, errorCode, errorMessage, showType, null, null);
 	}
 
 	public ApiResponse(T data) {
@@ -85,23 +85,8 @@ public class ApiResponse<T> {
 		return objectApiResponse;
 	}
 
-	/**
-	 * 错误响应
-	 *
-	 * @param errorCode 响应码
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ApiResponse<T> failCode(String errorCode) {
-		return fail(errorCode, null);
-	}
-
-	public static <T> ApiResponse<T> failMessage(String errorMessage) {
-		return fail("400", errorMessage);
-	}
-
-	public static <T> ApiResponse<T> fail(String errorCode, String errorMessage) {
-		return new ApiResponse<>(errorCode, errorMessage);
+	public static <T> ApiResponse<T> fail(String errorCode, String errorMessage, Integer showType) {
+		return new ApiResponse<>(errorCode, errorMessage, showType);
 	}
 
 	public static <T> ApiResponse<T> fail() {
