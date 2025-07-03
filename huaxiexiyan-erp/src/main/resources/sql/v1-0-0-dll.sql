@@ -53,38 +53,34 @@ COMMENT ON COLUMN "public"."menu"."is_deleted" IS '是否删除，0是未删除�
 COMMENT ON COLUMN "public"."menu"."deleted_by" IS '删除人';
 
 -- 创建资源实体表
-DROP TABLE IF EXISTS "public"."auth_resource";
-CREATE TABLE "public"."auth_resource"
+DROP TABLE IF EXISTS "public"."cat_user";
+CREATE TABLE "public"."cat_user"
 (
-    "id"            int8        NOT NULL,
-    "tenant_id"     int8        NOT NULL,
-    "app_id"        int8        NOT NULL,
-    "ref_id"        int8        NOT NULL,
-    "ref_type"      varchar(50) NOT NULL,
-    "active_status" varchar(10) NOT NULL DEFAULT 'ACTIVE',
+    "id"               int8         NOT NULL,
+    "username"         varchar(255) NOT NULL,
+    "password"         varchar(255) NOT NULL,
+    "nickname"         varchar(255) NOT NULL,
 
-    "c_by"          int8        NOT NULL,
-    "c_time"        timestamp            DEFAULT CURRENT_TIMESTAMP,
-    "lm_by"         int8,
-    "lm_time"       timestamp,
-    "de_by"         int8,
-    "de_time"       timestamp,
+    "created_by"       int8         NOT NULL,
+    "created_time"     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "last_modify_by"   int8,
+    "last_modify_time" timestamp,
+    "deleted_by"       int8,
+    "deleted_time"     timestamp,
     PRIMARY KEY ("id")
 );
-COMMENT ON TABLE "public"."auth_resource" IS '资源实体表';
-COMMENT ON COLUMN "public"."auth_resource"."id" IS '主键';
-COMMENT ON COLUMN "public"."auth_resource"."tenant_id" IS '租户id';
-COMMENT ON COLUMN "public"."auth_resource"."app_id" IS '来源appId';
-COMMENT ON COLUMN "public"."auth_resource"."ref_id" IS '资源实体id';
-COMMENT ON COLUMN "public"."auth_resource"."ref_type" IS '资源类型';
-COMMENT ON COLUMN "public"."auth_resource"."active_status" IS '活跃状态';
+COMMENT ON TABLE "public"."cat_user" IS '用户表';
+COMMENT ON COLUMN "public"."cat_user"."id" IS '主键';
+COMMENT ON COLUMN "public"."cat_user"."username" IS '登录名';
+COMMENT ON COLUMN "public"."cat_user"."password" IS '密码';
+COMMENT ON COLUMN "public"."cat_user"."nickname" IS '昵称';
 
-COMMENT ON COLUMN "public"."auth_resource"."c_by" IS '创建人';
-COMMENT ON COLUMN "public"."auth_resource"."c_time" IS '创建时间';
-COMMENT ON COLUMN "public"."auth_resource"."lm_by" IS '最后修改人';
-COMMENT ON COLUMN "public"."auth_resource"."lm_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."auth_resource"."de_by" IS '删除人';
-COMMENT ON COLUMN "public"."auth_resource"."de_time" IS '删除时间';
+COMMENT ON COLUMN "public"."cat_user"."created_by" IS '创建人';
+COMMENT ON COLUMN "public"."cat_user"."created_time" IS '创建时间';
+COMMENT ON COLUMN "public"."cat_user"."last_modify_by" IS '最后修改人';
+COMMENT ON COLUMN "public"."cat_user"."last_modify_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."cat_user"."deleted_by" IS '删除人';
+COMMENT ON COLUMN "public"."cat_user"."deleted_time" IS '删除时间';
 
 -- 创建角色实体表
 DROP TABLE IF EXISTS "public"."auth_role";
@@ -168,67 +164,4 @@ COMMENT ON COLUMN "public"."auth_user_role"."role_id" IS '角色id';
 COMMENT ON COLUMN "public"."auth_user_role"."c_by" IS '创建人';
 COMMENT ON COLUMN "public"."auth_user_role"."c_time" IS '创建时间';
 
--- 创建 租户实体表
-DROP TABLE IF EXISTS "public"."auth_tenant";
-CREATE TABLE "public"."auth_tenant"
-(
-    "id"            int8         NOT NULL,
-    "uid"           int4         NOT NULL,
-    "name"          varchar(100) NOT NULL,
-    "email"         varchar(50),
-    "remarks"       varchar(225),
-    "active_status" varchar(10)  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "domain_name"   varchar(225),
 
-    "c_by"          int8         NOT NULL,
-    "c_time"        timestamp             DEFAULT CURRENT_TIMESTAMP,
-    "lm_by"         int8,
-    "lm_time"       timestamp,
-    "de_by"         int8,
-    "de_time"       timestamp,
-    PRIMARY KEY ("id")
-);
-COMMENT ON TABLE "public"."auth_tenant" IS '角色资源关联关系表';
-COMMENT ON COLUMN "public"."auth_tenant"."id" IS '主键';
-COMMENT ON COLUMN "public"."auth_tenant"."uid" IS '唯一UID';
-COMMENT ON COLUMN "public"."auth_tenant"."name" IS '租户名';
-COMMENT ON COLUMN "public"."auth_tenant"."email" IS '注册邮箱';
-COMMENT ON COLUMN "public"."auth_tenant"."remarks" IS '备注';
-COMMENT ON COLUMN "public"."auth_tenant"."domain_name" IS '绑定的域名，多个逗号风格';
-COMMENT ON COLUMN "public"."auth_tenant"."active_status" IS '活跃状态';
-
-COMMENT ON COLUMN "public"."auth_tenant"."c_by" IS '创建人';
-COMMENT ON COLUMN "public"."auth_tenant"."c_time" IS '创建时间';
-COMMENT ON COLUMN "public"."auth_tenant"."lm_by" IS '最后修改人';
-COMMENT ON COLUMN "public"."auth_tenant"."lm_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."auth_tenant"."de_by" IS '删除人';
-COMMENT ON COLUMN "public"."auth_tenant"."de_time" IS '删除时间';
--- 创建 租户app关联关系表
-DROP TABLE IF EXISTS "public"."auth_tenant_app";
-CREATE TABLE "public"."auth_tenant_app"
-(
-    "id"            int8        NOT NULL,
-    "tenant_id"     int8        NOT NULL,
-    "app_id"        int8        NOT NULL,
-    "active_status" varchar(10) NOT NULL DEFAULT 'ACTIVE',
-
-    "c_by"          int8        NOT NULL,
-    "c_time"        timestamp            DEFAULT CURRENT_TIMESTAMP,
-    "lm_by"         int8,
-    "lm_time"       timestamp,
-    "de_by"         int8,
-    "de_time"       timestamp,
-    PRIMARY KEY ("id")
-);
-COMMENT ON TABLE "public"."auth_tenant_app" IS '租户app关联关系表';
-COMMENT ON COLUMN "public"."auth_tenant_app"."id" IS '主键';
-COMMENT ON COLUMN "public"."auth_tenant_app"."tenant_id" IS '租户id';
-COMMENT ON COLUMN "public"."auth_tenant_app"."app_id" IS '来源appId';
-COMMENT ON COLUMN "public"."auth_tenant_app"."active_status" IS '活跃状态';
-
-COMMENT ON COLUMN "public"."auth_tenant_app"."c_by" IS '创建人';
-COMMENT ON COLUMN "public"."auth_tenant_app"."c_time" IS '创建时间';
-COMMENT ON COLUMN "public"."auth_tenant_app"."lm_by" IS '最后修改人';
-COMMENT ON COLUMN "public"."auth_tenant_app"."lm_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."auth_tenant_app"."de_by" IS '删除人';
-COMMENT ON COLUMN "public"."auth_tenant_app"."de_time" IS '删除时间';

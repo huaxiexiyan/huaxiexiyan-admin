@@ -2,6 +2,8 @@ package com.huaxiexiyan.erp.presentation;
 
 
 import com.huaxiexiyan.api.common.api.ApiResponse;
+import com.huaxiexiyan.erp.domain.AuthUser;
+import com.huaxiexiyan.erp.presentation.interceptor.LoginUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @AllArgsConstructor
 @Slf4j
-@RequestMapping("/menus")
+@RequestMapping("/test")
 @RestController
 public class TestResource {
 
-    @GetMapping("/tree")
-    public ApiResponse<Void> test1() {
-        return ApiResponse.ok();
-    }
+	@GetMapping("/demo1")
+	public ApiResponse<AuthUser> test1(@LoginUser AuthUser authUser) {
+		return ApiResponse.ok(authUser);
+	}
 
 
 }

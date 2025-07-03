@@ -1,7 +1,5 @@
 package com.huaxiexiyan.api.common.utility;
 
-import com.huaxiexiyan.api.common.utility.transplant.CustomJavaTimeModule;
-import com.huaxiexiyan.api.common.utility.transplant.DateUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
@@ -10,6 +8,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.huaxiexiyan.api.common.utility.transplant.CustomJavaTimeModule;
+import com.huaxiexiyan.api.common.utility.transplant.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
@@ -48,18 +48,34 @@ public class JSONUtils {
 	}
 
 	public static <T> T parse(String jsonStr, Class<T> valueTypeRef) {
+		// try {
+		// 	Map<String, Object> objMap = getInstance().readValue(jsonStr, new TypeReference<>() {
+		// 	});
+		// 	return toPojo(objMap, valueTypeRef);
+		// } catch (JsonProcessingException e) {
+		// 	log.error("jackson 序列化失败", e);
+		// 	return null;
+		// }
 		try {
-			Map<String, Object> objMap = getInstance().readValue(jsonStr, new TypeReference<>() {
-			});
-			return toPojo(objMap, valueTypeRef);
+			return getInstance().readValue(jsonStr, valueTypeRef);
 		} catch (JsonProcessingException e) {
-			log.error("jackson 序列化失败", e);
+			log.error("jackson 反序列化失败，输入 [{}]，目标类型 [{}]", jsonStr, valueTypeRef.getName(), e);
+			return null;
+		}
+	}
+
+	public static <T> T parse(String jsonStr, TypeReference<T> typeReference) {
+		try {
+			return getInstance().readValue(jsonStr, typeReference);
+		} catch (JsonProcessingException e) {
+			log.error("jackson 泛型反序列化失败，输入 [{}]", jsonStr, e);
 			return null;
 		}
 	}
 
 	public static <T> T toPojo(Map<String, Object> map, Class<T> valueTypeRef) {
-		TypeReference<T> typeReference = new TypeReference<>() {};
+		TypeReference<T> typeReference = new TypeReference<>() {
+		};
 		return getInstance().convertValue(map, typeReference);
 	}
 

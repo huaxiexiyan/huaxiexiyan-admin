@@ -1,5 +1,6 @@
 package com.huaxiexiyan.erp.application;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.huaxiexiyan.erp.domain.CatUser;
 import com.huaxiexiyan.erp.infrastructure.repository.mapper.CatUserMapper;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CatUserApplication {
 
-	private final CatUserMapper baseRepository;
+	private final CatUserMapper catUserRepository;
 
 	public CatUser getByUsername(String username) {
-		return null;
+		return catUserRepository.selectOne(Wrappers.<CatUser>lambdaQuery()
+			.eq(CatUser::getUsername, username));
 	}
 
 }

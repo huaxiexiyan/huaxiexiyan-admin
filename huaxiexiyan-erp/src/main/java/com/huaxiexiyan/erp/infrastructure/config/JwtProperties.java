@@ -1,13 +1,11 @@
 package com.huaxiexiyan.erp.infrastructure.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author xiyan
  * @date 2025/7/1 18:11
  */
-@Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
 	private String secret;

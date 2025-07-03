@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.catguild.system.infrastructure.repository.mapper.AppDOMapper">
+<mapper namespace="com.huaxiexiyan.erp.infrastructure.repository.mapper.CatUserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="cn.catguild.system.infrastructure.domain.AppDO">
+    <resultMap id="BaseResultMap" type="com.huaxiexiyan.erp.domain.CatUser">
         <id column="id" property="id"/>
-        <result column="parent_id" property="parentId"/>
-        <result column="name" property="name"/>
-        <result column="describe" property="describe"/>
-        <result column="active_status" property="activeStatus"/>
+        <result column="parent_id" property="username"/>
+        <result column="name" property="password"/>
+        <result column="describe" property="nickname"/>
 
-        <result column="c_by" property="cBy"/>
-        <result column="c_time" property="cTime"/>
-        <result column="lm_by" property="lmBy"/>
-        <result column="lm_time" property="lmTime"/>
-        <result column="de_by" property="deBy"/>
-        <result column="de_time" property="deTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_modify_by" property="lastModifyBy"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="deleted_by" property="deletedBy"/>
+        <result column="deleted_time" property="deletedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

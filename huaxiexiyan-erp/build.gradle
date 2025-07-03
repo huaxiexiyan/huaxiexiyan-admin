@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.12'
 	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.graalvm.buildtools.native' version '0.10.6'
+//	id 'org.graalvm.buildtools.native' version '0.10.6'
 	// id 'com.google.cloud.tools.jib'
 }
 
@@ -61,6 +61,7 @@ dependencies {
     implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
     //
     implementation 'com.auth0:java-jwt:4.4.0'
+    implementation 'org.springframework.security:spring-security-core'
     // 持久化
     implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
     implementation 'com.baomidou:mybatis-plus-jsqlparser'

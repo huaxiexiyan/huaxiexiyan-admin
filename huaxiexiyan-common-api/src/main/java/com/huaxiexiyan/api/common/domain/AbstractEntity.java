@@ -30,17 +30,17 @@ public abstract class AbstractEntity {
     private Long id;
 
     /**
-     * 创建时间
-     **/
-    @Comment("记录创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(nullable = false)
-    private LocalDateTime createTime;
+	 * 创建时间
+	 **/
+	@Comment("记录创建时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(nullable = false)
+	private LocalDateTime createdTime;
 
-    @Comment("记录创建人id")
-    @JsonIgnore
-    @Column(nullable = false)
-    private Long createBy;
+	@Comment("记录创建人id")
+	@JsonIgnore
+	@Column(nullable = false)
+	private Long createdBy;
 
     /**
      * 最后修改时间
@@ -53,13 +53,13 @@ public abstract class AbstractEntity {
     @JsonIgnore
     private Long lastModifyBy;
 
-    /**
-     * 删除时间
-     */
-    @Comment("记录逻辑删除时间")
-    @JsonIgnore
-    @TableLogic(value = "0",delval = "1")
-    private Integer isDeleted;
+	/**
+	 * 删除时间
+	 */
+	@Comment("记录逻辑删除时间")
+	@JsonIgnore
+	@TableLogic(value = "null", delval = "now()")
+	private LocalDateTime deletedTime;
 
     @Comment("记录逻辑删除人id")
     @JsonIgnore

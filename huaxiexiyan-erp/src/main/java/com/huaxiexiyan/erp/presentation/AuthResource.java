@@ -2,7 +2,6 @@ package com.huaxiexiyan.erp.presentation;
 
 
 import com.huaxiexiyan.api.common.api.ApiResponse;
-import com.huaxiexiyan.api.common.type.Kv;
 import com.huaxiexiyan.api.common.utility.JSONUtils;
 import com.huaxiexiyan.erp.application.CatUserApplication;
 import com.huaxiexiyan.erp.domain.CatUser;
@@ -10,7 +9,11 @@ import com.huaxiexiyan.erp.infrastructure.exception.BusinessException;
 import com.huaxiexiyan.erp.infrastructure.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,36 +33,34 @@ public class AuthResource {
 
 	private final CatUserApplication catUserApplication;
 
-	@PostMapping("/login")
-	public ApiResponse<Kv<String, String>> login(@RequestBody CatUser requestCatUser) {
-		CatUser catUser = catUserApplication.getByUsername(requestCatUser.getUsername());
+	private final PasswordEncoder bCryptPasswordEncoder;
 
+	@PostMapping("/login")
+	public ApiResponse<Map<String, String>> login(@RequestBody CatUser requestCatUser) {
+		CatUser catUser = catUserApplication.getByUsername(requestCatUser.getUsername());
 		if (Objects.isNull(catUser)) {
 			// 用户名或密码错误
 			throw new BusinessException("10001", "用户名或密码错误");
 		}
 
-		Map<String, String> subjectMap = new HashMap<>();
+		boolean matches = bCryptPasswordEncoder.matches(requestCatUser.getPassword(), catUser.getPassword());
+		if (!matches) {
+			// 用户名或密码错误
+			throw new BusinessException("10001", "用户名或密码错误");
+		}
+
+		Map<String, Object> subjectMap = new HashMap<>();
+		subjectMap.put("id", catUser.getId());
+		subjectMap.put("username", catUser.getUsername());
+		subjectMap.put("nickname", catUser.getNickname());
 		String subject = JSONUtils.toJsonStr(subjectMap);
 		String token = jwtUtil.generateToken(subject);
-		Kv<String, String> response = new Kv<>("token", token);
+		Map<String, String> response = new HashMap<>();
+		response.put("token", token);
+		response.put("username", catUser.getUsername());
+		response.put("nickname", catUser.getNickname());
 		return ApiResponse.ok(response);
 	}
-
-	@GetMapping("/token")
-	public String token() {
-		return jwtUtil.generateToken("test-user");
-	}
-
-	@GetMapping("/verify")
-	public String verify(@RequestParam String token) {
-		var decoded = jwtUtil.verifyToken(token);
-		if (decoded == null) {
-			return "Invalid token";
-		}
-		return "User: " + decoded.getSubject();
-	}
-
 
 }
 
