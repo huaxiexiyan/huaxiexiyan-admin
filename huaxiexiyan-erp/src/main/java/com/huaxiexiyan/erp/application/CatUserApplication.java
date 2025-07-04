@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CatUserApplication {
 
-	private final CatUserMapper catUserRepository;
+	private final CatUserMapper catUserMapper;
 
 	public CatUser getByUsername(String username) {
-		return catUserRepository.selectOne(Wrappers.<CatUser>lambdaQuery()
+		return catUserMapper.selectOne(Wrappers.<CatUser>lambdaQuery()
 			.eq(CatUser::getUsername, username));
 	}
 

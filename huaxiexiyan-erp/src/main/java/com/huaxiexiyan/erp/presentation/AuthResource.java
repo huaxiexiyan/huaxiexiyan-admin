@@ -3,19 +3,21 @@ package com.huaxiexiyan.erp.presentation;
 
 import com.huaxiexiyan.api.common.api.ApiResponse;
 import com.huaxiexiyan.api.common.utility.JSONUtils;
+import com.huaxiexiyan.erp.application.CatMenuApplication;
 import com.huaxiexiyan.erp.application.CatUserApplication;
+import com.huaxiexiyan.erp.domain.AuthUser;
+import com.huaxiexiyan.erp.domain.CatMenu;
 import com.huaxiexiyan.erp.domain.CatUser;
 import com.huaxiexiyan.erp.infrastructure.exception.BusinessException;
 import com.huaxiexiyan.erp.infrastructure.util.JwtUtil;
+import com.huaxiexiyan.erp.presentation.interceptor.LoginUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,9 +33,11 @@ public class AuthResource {
 
 	private final JwtUtil jwtUtil;
 
+	private final PasswordEncoder bCryptPasswordEncoder;
+
 	private final CatUserApplication catUserApplication;
 
-	private final PasswordEncoder bCryptPasswordEncoder;
+	private final CatMenuApplication catMenuApplication;
 
 	@PostMapping("/login")
 	public ApiResponse<Map<String, String>> login(@RequestBody CatUser requestCatUser) {
@@ -60,6 +64,12 @@ public class AuthResource {
 		response.put("username", catUser.getUsername());
 		response.put("nickname", catUser.getNickname());
 		return ApiResponse.ok(response);
+	}
+
+	@GetMapping("/menu")
+	public ApiResponse<List<CatMenu>> authMenu(@LoginUser AuthUser authUser) {
+		List<CatMenu> menuTree = catMenuApplication.treeAuthMenuByUserId(authUser.getId());
+		return ApiResponse.ok(menuTree);
 	}
 
 }

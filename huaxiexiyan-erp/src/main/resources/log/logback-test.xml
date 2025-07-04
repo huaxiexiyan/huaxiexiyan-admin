@@ -23,12 +23,14 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="com.baomidou.mybatisplus.core" level="DEBUG"/>
     <!-- 业务日志 -->
-    <Logger name="cn.catguild" level="DEBUG"/>
+    <Logger name="com.huaxiexiyan" level="DEBUG"/>
+    <Logger name="com.huaxiexiyan.erp.infrastructure.repository.mapper" level="INFO"/>
 
-    <Logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>
-    <Logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>
-    <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    <Logger name="com.p6spy" level="DEBUG"/>
+    <!--    <logger name="com.baomidou.mybatisplus.core" level="DEBUG"/>-->
+    <!--    <Logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>-->
+    <!--    <Logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>-->
+    <!--    <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
 
 </configuration>

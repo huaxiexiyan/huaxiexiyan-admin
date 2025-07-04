@@ -4,6 +4,7 @@ import com.huaxiexiyan.api.common.api.ApiResponse;
 import com.huaxiexiyan.erp.infrastructure.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,22 +19,25 @@ import java.util.Objects;
  * @author xiyan
  * @date 2025/7/3 10:59
  */
+@Slf4j
 @ControllerAdvice
 @AllArgsConstructor
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException ex) {
+		log.error("Exception: {}", ex);
 		String code = ex.getErrorCode();
 		String devMessage = ex.getMessage();
 		Integer showType = ex.getShowType();
 		ApiResponse<Void> fail = ApiResponse.fail(code, devMessage, showType);
 		this.addHost(fail);
-		return ResponseEntity.badRequest().body(fail);
+		return ResponseEntity.ok(fail);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
+		log.error("Exception: {}", ex);
 		// 通用异常处理
 		String code = "500";
 		String devMessage = ex.getMessage();

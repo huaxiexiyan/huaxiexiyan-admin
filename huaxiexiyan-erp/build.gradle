@@ -63,6 +63,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'org.springframework.security:spring-security-core'
     // 持久化
+    implementation 'p6spy:p6spy:3.9.1'
     implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
     implementation 'com.baomidou:mybatis-plus-jsqlparser'
     implementation 'org.postgresql:postgresql:42.6.0'
