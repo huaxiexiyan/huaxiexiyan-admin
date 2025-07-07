@@ -39,7 +39,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		if (Objects.isNull(claims) || Objects.isNull(claims.getSubject())) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			throw new BusinessException("10003", "缺失token信息");
+			throw new BusinessException("10003", "无效token信息");
 		}
 		String subject = claims.getSubject();
 		AuthUser authUser = JSONUtils.parse(subject, AuthUser.class);
