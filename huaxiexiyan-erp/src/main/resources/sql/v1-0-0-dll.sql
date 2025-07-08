@@ -165,3 +165,57 @@ COMMENT ON COLUMN "public"."cat_role_menu"."deleted_by" IS '删除人';
 COMMENT ON COLUMN "public"."cat_role_menu"."deleted_time" IS '删除时间';
 
 
+-- 创建商品预算记录表
+DROP TABLE IF EXISTS "public"."pdd_goods_estimator";
+CREATE TABLE "public"."pdd_goods_estimator"
+(
+    "id"                int8      NOT NULL,
+    "goods_name"        varchar(255),
+    "sku_name"          varchar(255),
+    "purchase_cost"     numeric(10, 2),
+    "delivery_cost"     numeric(10, 2),
+    "packaging_cost"    numeric(10, 2),
+    "promotion_cost"    numeric(10, 2),
+    "discount_rate"     numeric(10, 2),
+    "selling_price"     numeric(10, 2),
+    "list_price"        numeric(10, 2),
+    "gross_margin_rate" numeric(10, 2),
+    "net_margin_rate"   numeric(10, 2),
+    "gross_profit"      numeric(10, 2),
+    "net_profit"        numeric(10, 2),
+    "roi"               numeric(10, 2),
+    "net_profit_roi"    numeric(10, 2),
+
+    "created_by"        int8      NOT NULL,
+    "created_time"      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "last_modify_by"    int8,
+    "last_modify_time"  timestamp,
+    "deleted_by"        int8,
+    "deleted_time"      timestamp,
+    PRIMARY KEY ("id")
+);
+COMMENT ON TABLE "public"."pdd_goods_estimator" IS '角色菜单关联表';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."id" IS '主键';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."goods_name" IS '商品名称';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."sku_name" IS 'sku名称';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."purchase_cost" IS '商品进价';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."delivery_cost" IS '快递费';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."packaging_cost" IS '包装费';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."promotion_cost" IS '推流费用';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."discount_rate" IS '活动折扣';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."selling_price" IS '商品售价';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."list_price" IS '商品标价';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."gross_margin_rate" IS '销售毛利率';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."net_margin_rate" IS '商品毛利率';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."gross_profit" IS '销售利润';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."net_profit" IS '最终利润';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."roi" IS '投产比';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."net_profit_roi" IS '利润投产比';
+
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."created_by" IS '创建人';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."created_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."last_modify_by" IS '最后修改人';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."last_modify_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."deleted_by" IS '删除人';
+COMMENT ON COLUMN "public"."pdd_goods_estimator"."deleted_time" IS '删除时间';
+

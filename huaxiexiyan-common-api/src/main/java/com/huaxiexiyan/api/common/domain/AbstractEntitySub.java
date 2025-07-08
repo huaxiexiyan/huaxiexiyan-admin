@@ -1,5 +1,7 @@
 package com.huaxiexiyan.api.common.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @Data
 public abstract class AbstractEntitySub {
 
+	@TableId(type = IdType.ASSIGN_ID)
     @Comment("记录主键")
     @Id
     @JsonDeserialize(as = Long.class)

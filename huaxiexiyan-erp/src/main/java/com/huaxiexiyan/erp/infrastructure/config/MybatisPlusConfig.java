@@ -3,7 +3,8 @@ package com.huaxiexiyan.erp.infrastructure.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
+import com.huaxiexiyan.erp.infrastructure.idgeneration.strategy.CatIdGenerator;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,9 +12,11 @@ import org.springframework.context.annotation.Configuration;
  * @author xiyan
  * @date 2022/10/14 15:43
  */
-@MapperScan("cn.catguild.auth.**.mapper")
+@AllArgsConstructor
 @Configuration
 public class MybatisPlusConfig {
+
+	private final CatIdGenerator catIdGenerator;
 
 	/**
 	 * 新的分页插件、新多租户插件配置
@@ -25,15 +28,16 @@ public class MybatisPlusConfig {
 		return interceptor;
 	}
 
-	//@Bean
-	// public GlobalConfig globalConfig() {
-	//	GlobalConfig conf = new GlobalConfig();
-	//	GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
-	//	dbConfig.setLogicDeleteField("deTime");
-	//	dbConfig.setLogicDeleteValue("now()");
-	//	dbConfig.setLogicNotDeleteValue("\"null\"");
-	//	conf.setDbConfig(dbConfig);
-	//	return conf;
-	//}
+	// @Bean
+	// public IdentifierGenerator idGenerator() {
+	// 	return entity -> {
+	// 		// 使用实体类名作为业务键
+	// 		// String bizKey = entity.getClass().getName();
+	// 		// 根据业务键调用分布式ID生成服务
+	// 		// 调用分布式ID生成逻辑
+	// 		return catIdGenerator.nextId();
+	// 	};
+	// }
+
 
 }

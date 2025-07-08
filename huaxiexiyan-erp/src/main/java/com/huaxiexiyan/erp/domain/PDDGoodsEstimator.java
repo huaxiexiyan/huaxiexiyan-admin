@@ -17,12 +17,13 @@ import java.math.RoundingMode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@TableName
+@TableName("pdd_goods_estimator")
 public class PDDGoodsEstimator extends AbstractEntity {
 
 	// 商品名称
+	private String goodsName;
 	// sku名称
-
+	private String skuName;
 	// 商品进价
 	private BigDecimal purchaseCost;
 	// 快递费
@@ -73,6 +74,12 @@ public class PDDGoodsEstimator extends AbstractEntity {
 			.subtract(this.promotionCost);
 	}
 
+	@JsonIgnore
+	public void calculateNetProfitByNetMarginRate() {
+		this.netProfit = this.sellingPrice.multiply(this.netMarginRate
+			.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP));
+	}
+
 	// 计算净利润率
 	@JsonIgnore
 	public void calculateNetMarginRate() {
@@ -94,6 +101,19 @@ public class PDDGoodsEstimator extends AbstractEntity {
 			.add(this.netProfit);
 	}
 
+	public void calculateSellingPriceByGrossMarginRate() {
+		this.sellingPrice = this.purchaseCost.divide((BigDecimal.ONE
+				.subtract(this.grossMarginRate.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP))),
+			2, RoundingMode.HALF_UP);
+	}
+
+	public void calculatePromotionCost() {
+		this.promotionCost = this.sellingPrice.subtract(this.purchaseCost)
+			.subtract(this.deliveryCost)
+			.subtract(this.packagingCost)
+			.subtract(this.netProfit);
+	}
+
 	/**
 	 * 计算标价
 	 * 售价 = 标价 * 折扣率
@@ -102,7 +122,7 @@ public class PDDGoodsEstimator extends AbstractEntity {
 	@JsonIgnore
 	public void calculateListPrice() {
 		this.listPrice = this.sellingPrice
-			.divide(this.discountRate.multiply(new BigDecimal("0.1")), 2, RoundingMode.HALF_UP);
+			.divide(this.discountRate.divide(BigDecimal.TEN, 2, RoundingMode.HALF_UP), 2, RoundingMode.HALF_UP);
 	}
 
 
@@ -115,6 +135,21 @@ public class PDDGoodsEstimator extends AbstractEntity {
 	public void calculateRoi() {
 		this.roi = this.sellingPrice.divide(this.promotionCost, 2, RoundingMode.HALF_UP);
 	}
+
+	@JsonIgnore
+	public void calculateNetProfitRoi() {
+		this.netProfitRoi = this.netProfit.divide(this.promotionCost, 2, RoundingMode.HALF_UP);
+	}
+
+
+	/**
+	 * 计算推流费用 = 售价 / 投产比
+	 */
+	@JsonIgnore
+	public void calculatePromotionCostByRoi() {
+		this.promotionCost = this.sellingPrice.divide(this.roi, 2, RoundingMode.HALF_UP);
+	}
+
 
 
 }

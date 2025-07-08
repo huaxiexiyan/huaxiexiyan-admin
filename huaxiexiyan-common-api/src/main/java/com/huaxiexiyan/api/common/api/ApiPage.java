@@ -1,6 +1,8 @@
 package com.huaxiexiyan.api.common.api;
 
-import com.huaxiexiyan.api.common.entity.CatPage;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.List;
@@ -20,14 +22,9 @@ public class ApiPage<T> {
 
 	private long total = 0;
 
-	public ApiPage() {
-
-	}
-
-	public ApiPage(CatPage<?> search) {
-		this.current = search.getCurrent() < 0 ? 1 : search.getCurrent();
-		this.size = search.getSize() < 0 ? 10 : search.getSize();
-		this.total = search.getTotal() < 0 ? 0 : search.getTotal();
+	@JsonIgnore
+	public IPage<T> getIpage() {
+		return new Page<T>(current, size, total);
 	}
 
 }

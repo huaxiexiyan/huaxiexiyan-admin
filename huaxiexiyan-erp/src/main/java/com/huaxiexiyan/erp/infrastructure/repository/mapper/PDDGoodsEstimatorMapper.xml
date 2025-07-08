@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huaxiexiyan.erp.infrastructure.repository.mapper.PDDGoodsEstimatorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.huaxiexiyan.erp.domain.PDDGoodsEstimator">
+        <id column="id" property="id"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="purchase_cost" property="purchaseCost"/>
+        <result column="delivery_cost" property="deliveryCost"/>
+        <result column="packaging_cost" property="packagingCost"/>
+        <result column="promotion_cost" property="promotionCost"/>
+        <result column="discount_rate" property="discountRate"/>
+        <result column="selling_price" property="sellingPrice"/>
+        <result column="list_price" property="listPrice"/>
+        <result column="gross_margin_rate" property="grossMarginRate"/>
+        <result column="net_margin_rate" property="netMarginRate"/>
+        <result column="gross_profit" property="grossProfit"/>
+        <result column="net_profit" property="netProfit"/>
+        <result column="roi" property="roi"/>
+        <result column="net_profit_roi" property="netProfitRoi"/>
+
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_modify_by" property="lastModifyBy"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="deleted_by" property="deletedBy"/>
+        <result column="deleted_time" property="deletedTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, name, describe, active_status, c_by, c_time, lm_by, lm_time, de_by, de_time
+    </sql>
+
+
+</mapper>

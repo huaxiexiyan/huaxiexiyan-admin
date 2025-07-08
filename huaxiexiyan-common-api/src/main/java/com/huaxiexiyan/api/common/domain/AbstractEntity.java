@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Data
 public abstract class AbstractEntity {
 
-    @TableId(type = IdType.INPUT)
+	@TableId(type = IdType.ASSIGN_ID)
     @Comment("记录主键")
     @Id
     @JsonDeserialize(as = Long.class)
