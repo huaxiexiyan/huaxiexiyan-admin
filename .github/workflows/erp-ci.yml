@@ -1,4 +1,4 @@
-name: business-ci
+name: ERP-ci
 
 on:
   workflow_dispatch:
@@ -6,24 +6,23 @@ on:
     branches:
       - 'main'
     paths:
-      - 'catguild-business/**'
-      - 'catguild-common-api/**'
+      - 'huaxiexiyan-erp/**'
   #pull_request:
   #  branches: [ main ]
 
 jobs:
   push_to_registry:
-    name: CI-Business
+    name: CI-ERP
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17 and Cache Gradle
+      - name: Set up JDK 21 and Cache Gradle
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: 'gradle'
 
       - name: Log in to Docker Hub
@@ -32,7 +31,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./huaxiexiyan-erp/gradlew
+
       - name: Build project
-        run: |
-          chmod +x ./gradlew
-          ./gradlew :catguild-business:jib
+        working-directory: huaxiexiyan-erp
+        run: ./gradlew jib

@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.12'
 	id 'io.spring.dependency-management' version '1.1.4'
 //	id 'org.graalvm.buildtools.native' version '0.10.6'
-	// id 'com.google.cloud.tools.jib'
+    id 'com.google.cloud.tools.jib' version "3.4.5"
 }
 
 group = 'com.huaxiexiyan'
@@ -31,14 +31,14 @@ dependencyManagement {
 repositories {
 	//maven仓库
 	mavenLocal()
-	maven { url 'https://maven.aliyun.com/repository/central/' }
-	maven { url 'https://maven.aliyun.com/repository/public/' }
-	maven { url 'https://maven.aliyun.com/repository/spring/' }
-	maven { url 'https://maven.aliyun.com/repository/google/' }
-	maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
-	maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
-	maven { url 'https://maven.aliyun.com/repository/grails-core/' }
-	maven { url 'https://maven.aliyun.com/repository/apache-snapshots/' }
+//	maven { url 'https://maven.aliyun.com/repository/central/' }
+//	maven { url 'https://maven.aliyun.com/repository/public/' }
+//	maven { url 'https://maven.aliyun.com/repository/spring/' }
+//	maven { url 'https://maven.aliyun.com/repository/google/' }
+//	maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+//	maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
+//	maven { url 'https://maven.aliyun.com/repository/grails-core/' }
+//	maven { url 'https://maven.aliyun.com/repository/apache-snapshots/' }
 	maven { url 'https://repo.spring.io/milestone/' }
 	mavenCentral()
 }
@@ -121,15 +121,15 @@ tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs += ["-parameters"]
 }
 
-//jib {
-//    to {
-//        image = 'huaxiexiyan/catguild-gateway:main'
-//    }
-//    container {
-//        jvmFlags = ['-Xmx64m', '-Xms64m'] // 添加堆内存参数
-//        creationTime = 'USE_CURRENT_TIMESTAMP'
-//        environment = [
-//                'TZ': 'Asia/Shanghai'
-//        ]
-//    }
-//}
+jib {
+    to {
+        image = 'huaxiexiyan/huaxiexiyan-gateway:main'
+    }
+    container {
+        jvmFlags = ['-Xmx64m', '-Xms64m'] // 添加堆内存参数
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+        environment = [
+            'TZ': 'Asia/Shanghai'
+        ]
+    }
+}
