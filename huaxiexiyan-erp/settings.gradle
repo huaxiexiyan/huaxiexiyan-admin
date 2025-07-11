@@ -5,3 +5,4 @@ rootProject.name = 'huaxiexiyan-erp'
 //        gradlePluginPortal()
 //    }
 //}
+includeBuild('../huaxiexiyan-common-api')
