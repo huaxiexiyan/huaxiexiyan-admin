@@ -31,7 +31,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./huaxiexiyan-gateway/gradlew
+
       - name: Build project
-        run: |
-          chmod +x ./huaxiexiyan-gateway/gradlew
-          ./huaxiexiyan-gateway/gradlew jib
+        working-directory: huaxiexiyan-gateway
+        run: ./gradlew jib
