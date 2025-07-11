@@ -12,7 +12,7 @@ on:
 
 jobs:
   push_to_registry:
-    name: CI-Gateway
+    name: CI-gateway
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo

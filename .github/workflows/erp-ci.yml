@@ -1,4 +1,4 @@
-name: ERP-ci
+name: erp-ci
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   push_to_registry:
-    name: CI-ERP
+    name: CI-erp
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
