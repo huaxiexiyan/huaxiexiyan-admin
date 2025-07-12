@@ -2,16 +2,20 @@ package com.huaxiexiyan.erp.application;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.huaxiexiyan.api.common.api.ApiPage;
 import com.huaxiexiyan.api.common.utility.IPageUtils;
 import com.huaxiexiyan.erp.domain.AuthUser;
 import com.huaxiexiyan.erp.domain.PDDGoodsEstimator;
+import com.huaxiexiyan.erp.infrastructure.exception.BusinessException;
 import com.huaxiexiyan.erp.infrastructure.repository.mapper.PDDGoodsEstimatorMapper;
 import com.huaxiexiyan.erp.presentation.query.PDDGoodsEstimatorQuery;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 /**
  * 商品评估器
@@ -27,6 +31,28 @@ public class GoodsEstimatorApplication {
 
 	private final PDDGoodsEstimatorMapper pddGoodsEstimatorMapper;
 
+	public void saveCalculateHistory(AuthUser authUser, PDDGoodsEstimator pddGoodsEstimator) {
+		// 存储计算历史
+		pddGoodsEstimator.setCreatedBy(authUser.getId());
+		pddGoodsEstimator.setCreatedTime(LocalDateTime.now());
+		int insert = pddGoodsEstimatorMapper.insert(pddGoodsEstimator);
+		if (!SqlHelper.retBool(insert)) {
+			throw new BusinessException("10101", "记录保存失败");
+		}
+	}
+
+	public void removeCalculateHistory(AuthUser authUser, Long id) {
+		// 存储计算历史
+		PDDGoodsEstimator pddGoodsEstimator = new PDDGoodsEstimator();
+		pddGoodsEstimator.setId(id);
+		pddGoodsEstimator.setDeletedBy(authUser.getId());
+		pddGoodsEstimator.setDeletedTime(LocalDateTime.now());
+		int i1 = pddGoodsEstimatorMapper.updateById(pddGoodsEstimator);
+		int i2 = pddGoodsEstimatorMapper.deleteById(id);
+		if (!SqlHelper.retBool(i1) || !SqlHelper.retBool(i2)) {
+			throw new BusinessException("10102", "记录删除失败");
+		}
+	}
 
 	/**
 	 * 以投产比定售价
@@ -52,9 +78,6 @@ public class GoodsEstimatorApplication {
 		// 计算投产比
 		pddGoodsEstimator.calculateNetProfitRoi();
 
-		// 存储计算历史
-		pddGoodsEstimator.setCreatedBy(authUser.getId());
-		pddGoodsEstimatorMapper.insert(pddGoodsEstimator);
 		return pddGoodsEstimator;
 	}
 
@@ -104,7 +127,8 @@ public class GoodsEstimatorApplication {
 	public ApiPage<PDDGoodsEstimator> listPddGoodsEstimatorHistory(AuthUser authUser,
 																   PDDGoodsEstimatorQuery pddGoodsEstimatorQuery) {
 		IPage<PDDGoodsEstimator> page = pddGoodsEstimatorMapper.selectPage(pddGoodsEstimatorQuery.getIpage(),
-			Wrappers.<PDDGoodsEstimator>lambdaQuery().orderByDesc(PDDGoodsEstimator::getCreatedTime));
+			Wrappers.<PDDGoodsEstimator>lambdaQuery().eq(PDDGoodsEstimator::getCreatedBy, authUser.getId())
+				.orderByDesc(PDDGoodsEstimator::getId));
 		return IPageUtils.toApiPage(page, IPage::getRecords);
 	}
 

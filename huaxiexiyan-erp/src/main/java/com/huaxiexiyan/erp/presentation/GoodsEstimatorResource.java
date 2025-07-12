@@ -30,19 +30,19 @@ public class GoodsEstimatorResource {
 		return ApiResponse.ok(calculate);
 	}
 
-	@PostMapping("/pdd/calculate/price-by-net-profit")
-	public ApiResponse<PDDGoodsEstimator> calculatePriceByNetProfit(@LoginUser AuthUser authUser,
-																	@RequestBody PDDGoodsEstimator pddGoodsEstimator) {
-		PDDGoodsEstimator calculate = goodsEstimatorApplication.calculatePriceByNetProfit(authUser, pddGoodsEstimator);
-		return ApiResponse.ok(calculate);
-	}
-
-	@PostMapping("/pdd/calculate/price-by-net-margin")
-	public ApiResponse<PDDGoodsEstimator> calculatePriceByNetMargin(@LoginUser AuthUser authUser,
-																	@RequestBody PDDGoodsEstimator pddGoodsEstimator) {
-		PDDGoodsEstimator calculate = goodsEstimatorApplication.calculatePriceByNetMargin(authUser, pddGoodsEstimator);
-		return ApiResponse.ok(calculate);
-	}
+	// @PostMapping("/pdd/calculate/price-by-net-profit")
+	// public ApiResponse<PDDGoodsEstimator> calculatePriceByNetProfit(@LoginUser AuthUser authUser,
+	// 																@RequestBody PDDGoodsEstimator pddGoodsEstimator) {
+	// 	PDDGoodsEstimator calculate = goodsEstimatorApplication.calculatePriceByNetProfit(authUser, pddGoodsEstimator);
+	// 	return ApiResponse.ok(calculate);
+	// }
+	//
+	// @PostMapping("/pdd/calculate/price-by-net-margin")
+	// public ApiResponse<PDDGoodsEstimator> calculatePriceByNetMargin(@LoginUser AuthUser authUser,
+	// 																@RequestBody PDDGoodsEstimator pddGoodsEstimator) {
+	// 	PDDGoodsEstimator calculate = goodsEstimatorApplication.calculatePriceByNetMargin(authUser, pddGoodsEstimator);
+	// 	return ApiResponse.ok(calculate);
+	// }
 
 
 	@GetMapping("/pdd/history")
@@ -50,6 +50,18 @@ public class GoodsEstimatorResource {
 														   @ModelAttribute PDDGoodsEstimatorQuery pddGoodsEstimatorQuery) {
 		ApiPage<PDDGoodsEstimator> apiPage = goodsEstimatorApplication.listPddGoodsEstimatorHistory(authUser, pddGoodsEstimatorQuery);
 		return ApiResponse.ok(apiPage);
+	}
+
+	@PostMapping("/pdd/history")
+	public ApiResponse<Void> saveCalculateHistory(@LoginUser AuthUser authUser, @RequestBody PDDGoodsEstimator pddGoodsEstimator) {
+		goodsEstimatorApplication.saveCalculateHistory(authUser, pddGoodsEstimator);
+		return ApiResponse.ok();
+	}
+
+	@DeleteMapping("/pdd/history/{id}")
+	public ApiResponse<Void> removeCalculateHistory(@LoginUser AuthUser authUser, @PathVariable Long id) {
+		goodsEstimatorApplication.removeCalculateHistory(authUser, id);
+		return ApiResponse.ok();
 	}
 
 }
